@@ -170,6 +170,15 @@ namespace TalentoPlus.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.Property<string>("DocumentoIdentidad")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -225,7 +234,9 @@ namespace TalentoPlus.Infrastructure.Migrations
 
                     b.ToTable("AspNetUsers", (string)null);
 
-                    b.UseTptMappingStrategy();
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Person");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("TalentoPlus.Domain.Entities.Sale", b =>
@@ -260,7 +271,7 @@ namespace TalentoPlus.Infrastructure.Migrations
                     b.Property<DateTime?>("LastLogin")
                         .HasColumnType("timestamp with time zone");
 
-                    b.ToTable("Admins");
+                    b.HasDiscriminator().HasValue("Admin");
                 });
 
             modelBuilder.Entity("TalentoPlus.Domain.Entities.Worker", b =>
@@ -290,7 +301,7 @@ namespace TalentoPlus.Infrastructure.Migrations
                     b.Property<int>("Wage")
                         .HasColumnType("integer");
 
-                    b.ToTable("Workers", (string)null);
+                    b.HasDiscriminator().HasValue("Worker");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -353,15 +364,6 @@ namespace TalentoPlus.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Worker");
-                });
-
-            modelBuilder.Entity("TalentoPlus.Domain.Entities.Worker", b =>
-                {
-                    b.HasOne("TalentoPlus.Domain.Entities.Person", null)
-                        .WithOne()
-                        .HasForeignKey("TalentoPlus.Domain.Entities.Worker", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("TalentoPlus.Domain.Entities.Worker", b =>

@@ -1,0 +1,126 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h1>Dashboard del Administrador</h1>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">Total Empleados</div>
+            <div class="card-body">
+                <h3 class="card-title">@ViewBag.TotalWorkers</h3>
+                <p class="card-text">Empleados registrados</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-header">En Vacaciones</div>
+            <div class="card-body">
+                <h3 class="card-title">@ViewBag.WorkersOnVacation</h3>
+                <p class="card-text">Empleados de vacaciones</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-header">Empleados Activos</div>
+            <div class="card-body">
+                <h3 class="card-title">@ViewBag.ActiveWorkers</h3>
+                <p class="card-text">Empleados trabajando</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-header">Ventas Totales</div>
+            <div class="card-body">
+                <h3 class="card-title">@ViewBag.TotalSales.ToString("C")</h3>
+                <p class="card-text">Monto total vendido</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AI Chat Interface -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <i class="bi bi-robot"></i> Consultas con Inteligencia Artificial
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Haz preguntas en lenguaje natural sobre los datos del sistema. Ejemplos:</p>
+                <ul class="text-muted">
+                    <li>"¿Cuántos empleados hay en Tecnología?"</li>
+                    <li>"¿Cuántos empleados están inactivos?"</li>
+                    <li>"¿Cuántos auxiliares tenemos?"</li>
+                </ul>
+                
+                <div class="input-group mb-3">
+                    <input type="text" id="aiQueryInput" class="form-control" placeholder="Escribe tu pregunta aquí..." />
+                    <button class="btn btn-primary" type="button" id="askAI">
+                        <i class="bi bi-send"></i> Preguntar
+                    </button>
+                </div>
+                
+                <div id="aiResponse" class="alert alert-info d-none" role="alert">
+                    <strong>Respuesta:</strong> <span id="aiResponseText"></span>
+                </div>
+                
+                <div id="aiLoading" class="d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Procesando...</span>
+                    </div>
+                    <span class="ms-2">Procesando tu consulta...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('askAI').addEventListener('click', async function() {
+            const query = document.getElementById('aiQueryInput').value;
+            if (!query) {
+                alert('Por favor escribe una pregunta');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('aiLoading').classList.remove('d-none');
+            document.getElementById('aiResponse').classList.add('d-none');
+
+            try {
+                const response = await fetch('@Url.Action("ProcessAIQuery")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+
+                const data = await response.json();
+                
+                // Hide loading, show response
+                document.getElementById('aiLoading').classList.add('d-none');
+                document.getElementById('aiResponse').classList.remove('d-none');
+                document.getElementById('aiResponseText').textContent = data.response;
+            } catch (error) {
+                document.getElementById('aiLoading').classList.add('d-none');
+                document.getElementById('aiResponse').classList.remove('d-none');
+                document.getElementById('aiResponseText').textContent = 'Error al procesar la consulta: ' + error.message;
+            }
+        });
+
+        // Allow Enter key to submit
+        document.getElementById('aiQueryInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('askAI').click();
+            }
+        });
+    </script>
+}

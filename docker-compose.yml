@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # TalentoPlus API
+  api:
+    build:
+      context: .
+      dockerfile: TalentoPlusAPI/Dockerfile
+    container_name: talentoplus-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=${DATABASE_CONNECTION_STRING}
+      - JWT__Secret=${JWT_SECRET:-your_super_secret_jwt_key_minimum_32_characters_long}
+      - JWT__Issuer=${JWT_ISSUER:-TalentoPlusAPI}
+      - JWT__Audience=${JWT_AUDIENCE:-TalentoPlusClients}
+      - GeminiSettings__ApiKey=${GEMINI_API_KEY}
+    ports:
+      - "5100:80"
+    networks:
+      - talentoplus-network
+    restart: unless-stopped
+
+  # TalentoPlus Web
+  web:
+    build:
+      context: .
+      dockerfile: TalentoPlusWeb/Dockerfile
+    container_name: talentoplus-web
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=${DATABASE_CONNECTION_STRING}
+      - SmtpSettings__Host=${SMTP_HOST:-pro.eu.turbo-smtp.com}
+      - SmtpSettings__Port=${SMTP_PORT:-465}
+      - SmtpSettings__User=${SMTP_USER}
+      - SmtpSettings__Pass=${SMTP_PASS}
+      - SmtpSettings__EnableSsl=${SMTP_ENABLE_SSL:-true}
+      - GeminiSettings__ApiKey=${GEMINI_API_KEY}
+    ports:
+      - "5000:80"
+    networks:
+      - talentoplus-network
+    restart: unless-stopped
+
+networks:
+  talentoplus-network:
+    driver: bridge

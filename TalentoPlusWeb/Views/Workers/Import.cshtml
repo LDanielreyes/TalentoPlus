@@ -1,0 +1,46 @@
+@model TalentoPlusWeb.Models.WorkerImportViewModel
+
+@{
+    ViewData["Title"] = "Importar Trabajadores";
+}
+
+<h1>Importar Trabajadores</h1>
+
+<h4>Subir Archivo Excel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Import" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="File" class="control-label"></label>
+                <input asp-for="File" class="form-control" accept=".xlsx" />
+                <span asp-validation-for="File" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <input type="submit" value="Subir" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="alert alert-info mt-3">
+    <strong>Nota:</strong> El archivo Excel debe tener las siguientes columnas en orden:
+    <ol>
+        <li><strong>Nombres</strong></li>
+        <li><strong>Apellidos</strong></li>
+        <li><strong>FechaNacimiento</strong></li>
+        <li><strong>Direccion</strong></li>
+        <li><strong>Telefono</strong></li>
+        <li><strong>Email</strong></li>
+        <li><strong>Cargo</strong></li>
+        <li><strong>Salario</strong> (número entero)</li>
+        <li><strong>FechaIngreso</strong></li>
+        <li><strong>Estado</strong> (Activo, Inactivo, Vacaciones, Incapacidad)</li>
+        <li><strong>NivelEducativo</strong> (Bachiller, Tecnico, Tecnólogo, Profesional, Especialización, Maestría, Doctorado)</li>
+        <li><strong>PerfilProfesional</strong></li>
+        <li><strong>DocumentoIdentidad</strong> (Cédula, DNI, Pasaporte, etc.)</li>
+        <li><strong>Departamento</strong> (Tecnología, RecursosHumanos, Ventas, Finanzas, Marketing, Operaciones, Legal, Administración)</li>
+    </ol>
+</div>
