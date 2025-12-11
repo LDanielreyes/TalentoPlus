@@ -3,7 +3,7 @@
 Sistema de gestión de recursos humanos desarrollado con .NET 8, PostgreSQL y arquitectura limpia.
 
 ## � Repositorio
-**GitHub**: [https://github.com/TU_USUARIO/TalentoPlus](https://github.com/TU_USUARIO/TalentoPlus)
+**GitHub**: [https://github.com/LDanielreyes/TalentoPlus](https://github.com/LDanielreyes/TalentoPlus)
 
 ---
 
@@ -17,7 +17,7 @@ Sistema de gestión de recursos humanos desarrollado con .NET 8, PostgreSQL y ar
 
 1. **Clonar el repositorio**
 ```bash
-git clone https://github.com/TU_USUARIO/TalentoPlus.git
+git clone https://github.com/LDanielreyes/TalentoPlus.git
 cd TalentoPlus
 ```
 
@@ -217,7 +217,7 @@ Documentación completa en: http://localhost:5100/swagger
 ## � Autor
 
 **Lucas Chacón**  
-Email: lucas.chaconc@pca.edu.co
+Email: lucasdanielchaconr@gmail.com
 
 ---
 
