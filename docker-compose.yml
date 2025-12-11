@@ -8,13 +8,16 @@ services:
       dockerfile: TalentoPlusAPI/Dockerfile
     container_name: talentoplus-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Production}
       - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=${DATABASE_CONNECTION_STRING}
-      - JWT__Secret=${JWT_SECRET:-your_super_secret_jwt_key_minimum_32_characters_long}
+      # Database - Clever Cloud PostgreSQL (valores por defecto incluidos)
+      - ConnectionStrings__DefaultConnection=${DATABASE_CONNECTION_STRING:-Host=bvn7kjra0ydeguqsgd0s-postgresql.services.clever-cloud.com;Port=50013;Database=bvn7kjra0ydeguqsgd0s;Username=uzhklykptxpc3sgfnlxh;Password=IiRebc6TYiwXsNyLRdlbj5T4s8jtWh;SSL Mode=Require;Trust Server Certificate=true}
+      # JWT Configuration (valores por defecto seguros)
+      - JWT__Secret=${JWT_SECRET:-TalentoPlusSecureJWTKey2024MinimumThirtyTwoCharactersRequired!}
       - JWT__Issuer=${JWT_ISSUER:-TalentoPlusAPI}
       - JWT__Audience=${JWT_AUDIENCE:-TalentoPlusClients}
-      - GeminiSettings__ApiKey=${GEMINI_API_KEY}
+      # Gemini AI (opcional - puede configurarse vía .env si se necesita)
+      - GeminiSettings__ApiKey=${GEMINI_API_KEY:-}
     ports:
       - "5100:80"
     networks:
@@ -28,15 +31,18 @@ services:
       dockerfile: TalentoPlusWeb/Dockerfile
     container_name: talentoplus-web
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Production}
       - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=${DATABASE_CONNECTION_STRING}
+      # Database - Clever Cloud PostgreSQL (valores por defecto incluidos)
+      - ConnectionStrings__DefaultConnection=${DATABASE_CONNECTION_STRING:-Host=bvn7kjra0ydeguqsgd0s-postgresql.services.clever-cloud.com;Port=50013;Database=bvn7kjra0ydeguqsgd0s;Username=uzhklykptxpc3sgfnlxh;Password=IiRebc6TYiwXsNyLRdlbj5T4s8jtWh;SSL Mode=Require;Trust Server Certificate=true}
+      # SMTP Configuration (valores por defecto - pueden sobrescribirse vía .env)
       - SmtpSettings__Host=${SMTP_HOST:-pro.eu.turbo-smtp.com}
       - SmtpSettings__Port=${SMTP_PORT:-465}
-      - SmtpSettings__User=${SMTP_USER}
-      - SmtpSettings__Pass=${SMTP_PASS}
+      - SmtpSettings__User=${SMTP_USER:-demo@talentoplus.com}
+      - SmtpSettings__Pass=${SMTP_PASS:-}
       - SmtpSettings__EnableSsl=${SMTP_ENABLE_SSL:-true}
-      - GeminiSettings__ApiKey=${GEMINI_API_KEY}
+      # Gemini AI (opcional - puede configurarse vía .env si se necesita)
+      - GeminiSettings__ApiKey=${GEMINI_API_KEY:-}
     ports:
       - "5000:80"
     networks:

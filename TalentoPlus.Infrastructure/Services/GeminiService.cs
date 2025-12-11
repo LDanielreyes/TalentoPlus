@@ -64,7 +64,16 @@ Responde SOLO con el JSON, sin texto adicional.";
             
             if (!response.IsSuccessStatusCode)
             {
-                logger.LogError("Gemini API request failed: {StatusCode}. Response: {Response}", response.StatusCode, responseContent);
+                // Para errores de autenticación/permisos (API key inválida/filtrada), usar Warning en lugar de Error
+                if (response.StatusCode == System.Net.HttpStatusCode.Forbidden || 
+                    response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    logger.LogWarning("Gemini API key is invalid or has been revoked. AI features are disabled. Status: {StatusCode}", response.StatusCode);
+                }
+                else
+                {
+                    logger.LogError("Gemini API request failed: {StatusCode}. Response: {Response}", response.StatusCode, responseContent);
+                }
                 return new AIQueryResponse { QueryType = "count_workers", Parameter = "" };
             }
 

@@ -21,24 +21,20 @@ git clone https://github.com/LDanielreyes/TalentoPlus.git
 cd TalentoPlus
 ```
 
-2. **Configurar variables de entorno**
-
-Copiar `.env.example` a `.env`:
-```bash
-cp .env.example .env
-```
-
-Editar `.env` con tus valores (ver sección Variables de Entorno).
-
-3. **Desplegar**
+2. **Desplegar directamente** ✨
 ```bash
 docker compose up -d --build
 ```
 
-4. **Acceder a las aplicaciones**
+**¡Eso es todo!** El proyecto viene con valores por defecto funcionales. No necesitas configurar variables de entorno.
+
+3. **Acceder a las aplicaciones**
 - **Web Application**: http://localhost:5000
 - **API REST**: http://localhost:5100
 - **Swagger (Documentación)**: http://localhost:5100/swagger
+
+> [!TIP]
+> **Configuración Opcional**: Si necesitas cambiar la base de datos, credenciales SMTP o la API key de Gemini, puedes crear un archivo `.env` (ver sección Variables de Entorno). Los valores en `.env` sobrescribirán los valores por defecto.
 
 ### Comandos Útiles
 ```bash
@@ -104,32 +100,47 @@ Acceso: https://localhost:5101/swagger
 
 ---
 
-## ⚙️ Variables de Entorno
+## ⚙️ Variables de Entorno (OPCIONAL)
 
-### Archivo .env
-El archivo `.env` debe contener:
+El proyecto **funciona sin configuración** usando valores por defecto incluidos en `docker-compose.yml`.
+
+### Sobrescribir Valores (Opcional)
+
+Si necesitas usar tu propia base de datos, configuración SMTP o API key de Gemini, crea un archivo `.env`:
+
+1. **Copiar plantilla**:
+```bash
+cp .env.example .env
+```
+
+2. **Editar con tus valores**:
 
 ```bash
-# Database (Clever Cloud)
+# Database (solo si quieres usar otra base de datos)
 DATABASE_CONNECTION_STRING=Host=xxx.clever-cloud.com;Port=xxx;Database=xxx;Username=xxx;Password=xxx;SSL Mode=Require;Trust Server Certificate=true
 
-# JWT
+# JWT (solo si quieres cambiar las claves por defecto)
 JWT_SECRET=tu_clave_secreta_minimo_32_caracteres
 JWT_ISSUER=TalentoPlusAPI
 JWT_AUDIENCE=TalentoPlusClients
 
-# SMTP (Email)
+# SMTP (solo si quieres enviar emails reales)
 SMTP_HOST=smtp.ejemplo.com
 SMTP_PORT=465
 SMTP_USER=tu_email@ejemplo.com
 SMTP_PASS=tu_password
 SMTP_ENABLE_SSL=true
 
-# Gemini AI (Opcional)
+# Gemini AI (solo si quieres usar funciones de IA)
 GEMINI_API_KEY=tu_api_key
 ```
 
-**Nota**: El archivo `.env.example` contiene una plantilla completa.
+> [!NOTE]
+> **Valores por defecto incluidos:**
+> - **Base de datos**: PostgreSQL en Clever Cloud (ya configurada)
+> - **JWT**: Claves seguras pre-configuradas
+> - **SMTP**: Configuración de ejemplo (emails no se enviarán sin credenciales reales)
+> - **Gemini AI**: Vacío (funcionalidades de IA deshabilitadas por defecto)
 
 ---
 
@@ -223,7 +234,10 @@ Email: lucasdanielchaconr@gmail.com
 
 ## 📝 Notas
 
-- La base de datos está alojada en **Clever Cloud**
-- Use `.env.example` como plantilla para configuración
+- La base de datos está alojada en **Clever Cloud** (ya configurada por defecto)
+- El proyecto funciona **sin configuración** - despliega directamente con `docker compose up`
+- El archivo `.env` es **opcional** - solo necesario si quieres sobrescribir valores por defecto
+- Use `.env.example` como plantilla si necesita configuración personalizada
 - Nunca commita el archivo `.env` al repositorio
 - Consulte `DOCKER_README.md` para detalles adicionales de Docker
+

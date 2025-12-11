@@ -30,7 +30,9 @@ public class WorkerService(
         }
 
         var totalCount = await query.CountAsync();
-        var workers = await query.Skip((pageNumber - 1) * pageSize)
+        var workers = await query
+                                 .OrderByDescending(w => w.RegisterDate)  // Ordenar por fecha de registro (más recientes primero)
+                                 .Skip((pageNumber - 1) * pageSize)
                                  .Take(pageSize)
                                  .ToListAsync();
 
